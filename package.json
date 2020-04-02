@@ -1,6 +1,6 @@
 {
   "name": "slack-chat-by-amalker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/index.js",
   "bin": {
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git@github.com:hexlet-components/projects-frontend-l4-server.git"
   },
-  "author": "Vadim Dmitrenko <it.amalker@yandex.ru> (amalker)",
+  "author": "Vadim Dmitrenko",
   "license": "ISC",
   "homepage": "",
   "dependencies": {
@@ -62,7 +62,9 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "redux": "^4.0.5",
+    "redux-actions": "^2.6.5",
     "redux-bootstrap": "^1.3.0",
     "regenerator-runtime": "^0.13.5",
     "sass-loader": "^8.0.2",
