@@ -6,8 +6,14 @@ import 'regenerator-runtime/runtime';
 import '../assets/application.scss';
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducers from './reducers/index.js';
+import { initState } from './actions/index.js';
 
-import App from './App.jsx';
+
+import App from './components/App.jsx';
 
 // import faker from 'faker';
 // @ts-ignore
@@ -22,7 +28,19 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('it works!');
 console.log('gon', gon);
 
+const store = createStore(
+  reducers,
+  compose(
+    applyMiddleware(thunk),
+  ),
+);
+
+store.dispatch(initState(gon));
+
+
 ReactDOM.render(
-  <App channels={gon.channels}/>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('chat'),
 );
