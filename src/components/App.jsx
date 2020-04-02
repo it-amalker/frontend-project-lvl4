@@ -9,7 +9,7 @@ export default class App extends React.Component {
     const { channels } = this.props;
     return (
       <div className="row h-100 pb-3">
-        <Channels channels={channels}/>
+        <Channels />
         <Chat />
       </div>
     );

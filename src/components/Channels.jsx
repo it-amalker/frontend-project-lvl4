@@ -1,8 +1,13 @@
 // @ts-check
 
 import React from 'react';
+import { connect } from 'react-redux';
 
-export default class Channels extends React.Component {
+const mapStateToProps = (state) => {
+  return state.channels;
+};
+
+class Channels extends React.Component {
   render() {
     const { channels } = this.props;
     if (channels.length === 0) {
@@ -24,3 +29,5 @@ export default class Channels extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Channels);
