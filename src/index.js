@@ -11,22 +11,21 @@ import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers/index.js';
 import { initState } from './actions/index.js';
-
+import { setUsernameCookies } from './usernameContext.js';
 
 import App from './components/App.jsx';
 
-// import faker from 'faker';
 // @ts-ignore
 import gon from 'gon';
 
-// import cookies from 'js-cookie';
-// import io from 'socket.io-client';
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
 console.log('it works!');
 console.log('gon', gon);
+
+setUsernameCookies();
 
 const store = createStore(
   reducers,
@@ -36,7 +35,6 @@ const store = createStore(
 );
 
 store.dispatch(initState(gon));
-
 
 ReactDOM.render(
   <Provider store={store}>
