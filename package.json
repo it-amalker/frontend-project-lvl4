@@ -1,6 +1,6 @@
 {
   "name": "slack-chat-by-amalker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/index.js",
   "bin": {
@@ -75,9 +75,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4",
+    "@types/jest": "^25.1.5",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^25.2.4",
+    "babel-jest": "^25.2.6",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-import-resolver-webpack": "^0.12.1",
@@ -85,8 +85,8 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
-    "jest": "^25.2.4",
-    "jest-cli": "^25.2.4",
+    "jest": "^25.2.7",
+    "jest-cli": "^25.2.7",
     "nodemon": "^2.0.2"
   }
 }
