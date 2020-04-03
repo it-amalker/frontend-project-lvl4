@@ -8,9 +8,9 @@ export const initStateSuccess = createAction('STATE_INIT');
 
 export const getChannelsSuccess = createAction('CHANNELS_GET_SUCCESS');
 
-export const createMessage = ({ text, currentChannelId }) => async (dispatch) => {
+export const createMessage = ({ text, author, currentChannelId }) => async (dispatch) => {
   const url = routes.channelMessagesPath(currentChannelId);
-  const response = await axios.post(url, { data: { attributes: { text } } });
+  const response = await axios.post(url, { data: { attributes: { text, author } } });
   dispatch(createMessageSuccess({ message: response.data.data }));
 };
 
