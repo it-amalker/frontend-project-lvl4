@@ -11,7 +11,6 @@ import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from './reducers/index.js';
 import { initState } from './actions/index.js';
-import { setUsernameCookies } from './usernameContext.js';
 
 import App from './components/App.jsx';
 
@@ -24,8 +23,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 console.log('it works!');
 console.log('gon', gon);
-
-setUsernameCookies();
 
 const store = createStore(
   reducers,
