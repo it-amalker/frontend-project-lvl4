@@ -7,6 +7,7 @@ export const createMessageSuccess = createAction('MESSAGE_CREATE_SUCCESS');
 export const initStateSuccess = createAction('STATE_INIT');
 
 export const getChannelsSuccess = createAction('CHANNELS_GET_SUCCESS');
+export const switchChannelsSuccess = createAction('CHANNELS_SWITCH_SUCCESS');
 
 export const createMessage = ({ text, author, currentChannelId }) => async (dispatch) => {
   const url = routes.channelMessagesPath(currentChannelId);
