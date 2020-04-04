@@ -1,22 +1,27 @@
 // @ts-check
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actions from '../actions/index.js';
 import cn from 'classnames';
+import Modal from './modalAddChannel.jsx';
 
 const Channels = () => {
   // @ts-ignore
   const channelsState = useSelector(({ channels }) => channels);
   const { channels, currentChannelId } = channelsState;
+  const dispatch = useDispatch();
 
-  if (channels.length === 0) {
-    return null;
-  }
+  const switchChannel = (id) => (e) => {
+    e.preventDefault();
+    dispatch(actions.switchChannelsSuccess({ id }));
+  };
 
   return (
     <div className="col-3 border-right">
-      <div className="d-flex mb-2">
+      <div className="d-flex mb-2 align-items-center">
         <span>Channels</span>
+        {<Modal />}
       </div>
       <ul className="nav flex-column nav-pills nav-fill">
         {channels.map(({ name, id}) => {
@@ -29,7 +34,7 @@ const Channels = () => {
           });
           return (
             <li key={id} className="nav-item">
-              <button className={btnClasses} type="button">{name}</button>
+              <button className={btnClasses} type="button" onClick={switchChannel(id)}>{name}</button>
             </li>
           );
         })}
