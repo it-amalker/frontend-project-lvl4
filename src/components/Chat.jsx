@@ -41,12 +41,14 @@ const Chat = () => {
   const renderMessages = () => {
     return (
       <div className="messages-block overflow-auto mb-3">
-        {messagesState.messages.map((message) => (
-          <div key={message.id}>
-            <b>{message.author}</b>
-            :
-            {` ${message.text}`}
-          </div>
+        {messagesState.messages
+          .filter((message) => message.channelId === currentChannelId)
+          .map((message) => (
+            <div key={message.id}>
+              <b>{message.author}</b>
+              :
+              {` ${message.text}`}
+            </div>
         ))}
       </div>
     )
