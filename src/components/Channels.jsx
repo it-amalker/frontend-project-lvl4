@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions/index.js';
 import cn from 'classnames';
-import Modal from './modalAddChannel.jsx';
+import Modal from './ModalAddChannel.jsx';
 
 const Channels = () => {
   // @ts-ignore
