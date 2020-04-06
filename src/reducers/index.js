@@ -13,6 +13,9 @@ const messageCreateState = handleActions({
   [actions.createMessageSuccess]() {
     return 'finished';
   },
+  [actions.resetCreateMessageStatus]() {
+    return 'none';
+  },
 }, 'none');
 
 const channelCreateState = handleActions({
@@ -25,10 +28,13 @@ const channelCreateState = handleActions({
   [actions.createChannelSuccess]() {
     return 'finished';
   },
+  [actions.resetCreateChannelStatus]() {
+    return 'none';
+  },
 }, 'none');
 
 const messages = handleActions({
-  [actions.initStateSuccess](state, { payload: { gon } }) {
+  [actions.initAppState](state, { payload: { gon } }) {
     return {
       messages: gon.messages,
     };
@@ -41,7 +47,7 @@ const messages = handleActions({
 }, { messages: [] });
 
 const channels = handleActions({
-  [actions.initStateSuccess](state, { payload: { gon } }) {
+  [actions.initAppState](state, { payload: { gon } }) {
     return {
       channels: gon.channels,
       currentChannelId: gon.currentChannelId,
@@ -51,12 +57,6 @@ const channels = handleActions({
     return {
       ...state,
       channels: [...state.channels, channel.attributes],
-    };
-  },
-  [actions.getChannelsSuccess](state, { payload: { data } }) {
-    const channels = data.map(({ attributes }) => ({ ...attributes }));
-    return {
-      channels,
     };
   },
   [actions.switchChannelsSuccess](state, { payload: { id } }) {
