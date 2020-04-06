@@ -1,10 +1,13 @@
 // @ts-check
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import * as actions from '../actions/index.js';
+import socket from '../socket.js';
 import cn from 'classnames';
-import Modal from './ModalAddChannel.jsx';
+import Modal from './ModalCreateChannel.jsx';
+import ModalRemove from './ModalRemoveChannel.jsx';
 import ChannelsStatus from './ChannelsStatus.jsx';
 
 const Channels = () => {
@@ -15,11 +18,29 @@ const Channels = () => {
 
   const switchChannel = (id) => (e) => {
     e.preventDefault();
-    dispatch(actions.switchChannelsSuccess({ id }));
+    dispatch(actions.switchChannel({ id }));
   };
+
+  const onRemove = (id) => () => {
+    dispatch(actions.modalShowOnRemoveChannel({ modalShow: true, removableId: id }));
+  };
+
+  useEffect(() => {
+    socket.on('newChannel', ({ data }) => {
+      dispatch(actions.createChannelSuccess({ channel: data }));
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on('removeChannel', ({ data: { id } }) => {
+      console.log('id ', id);
+      dispatch(actions.removeChannelSuccess({ id }));
+    });
+  }, []);
 
   return (
     <div className="col-3 border-right">
+      {<ModalRemove />}
       <div className="d-flex align-items-center">
         <span>Channels</span>
         {<Modal />}
@@ -28,17 +49,32 @@ const Channels = () => {
         {<ChannelsStatus messagesLength={channels.length} />}
       </div>
       <ul className="nav flex-column nav-pills nav-fill">
-        {channels.map(({ name, id}) => {
+        {channels.map(({ name, id, removable}) => {
           const isActive = id === currentChannelId;
           const btnClasses = cn({
-            'nav-link': true,
-            btn: true,
             'btn-block': true,
             active: isActive,
           });
           return (
-            <li key={id} className="nav-item">
-              <button className={btnClasses} type="button" onClick={switchChannel(id)}>{name}</button>
+            <li key={id} className="nav-item mb-1">
+              <ButtonGroup className="btn-block">
+                <Button
+                  style={{zIndex: 2}}
+                  className={btnClasses}
+                  variant="light"
+                  onClick={switchChannel(id)}
+                >
+                  {name}
+                </Button>
+                <Button
+                  disabled={!removable}
+                  className="overflow-auto" 
+                  variant="secondary"
+                  onClick={onRemove(id)}
+                >
+                  -
+                </Button>
+              </ButtonGroup>
             </li>
           );
         })}
