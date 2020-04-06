@@ -14,10 +14,10 @@ const ChannelsStatus = ({ messagesLength }) => {
 
   const statusByChannelsState = {
     none: () => (
-      <Badge variant="primary">Manage channels</Badge>
+      <Badge variant="secondary">Manage channels</Badge>
     ),
     requested: () => (
-      <Badge variant="info">Processing...</Badge>
+      <Badge variant="primary">Processing...</Badge>
     ),
     finished: () => {
       setResetDelay(() => dispatch(resetCreateChannelStatus()), 2500);
@@ -37,7 +37,7 @@ const ChannelsStatus = ({ messagesLength }) => {
     <div>
       <span className="small">
         <b>Channels: </b>
-        <Badge variant="primary">{messagesLength}</Badge>{' '}
+        <Badge variant="secondary">{messagesLength}</Badge>{' '}
       </span>
       <span className="small">
         <b>Status: </b> 
