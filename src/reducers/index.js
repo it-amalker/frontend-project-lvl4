@@ -33,6 +33,21 @@ const channelCreateState = handleActions({
   },
 }, 'none');
 
+const channelRemoveState = handleActions({
+  [actions.removeChannelRequest]() {
+    return 'requested';
+  },
+  [actions.removeChannelFailure]() {
+    return 'failed';
+  },
+  [actions.removeChannelSuccess]() {
+    return 'finished';
+  },
+  [actions.resetRemoveChannelStatus]() {
+    return 'none';
+  },
+}, 'none');
+
 const messages = handleActions({
   [actions.initAppState](state, { payload: { gon } }) {
     return {
@@ -59,7 +74,16 @@ const channels = handleActions({
       channels: [...state.channels, channel.attributes],
     };
   },
-  [actions.switchChannelsSuccess](state, { payload: { id } }) {
+  [actions.removeChannelSuccess](state, { payload: { id } }) {
+    console.log('id ', id);
+    const newChannels = state.channels.filter((c) => c.id !== id);
+    console.log('newChannels ', newChannels);
+    return {
+      channels: newChannels,
+      currentChannelId: 1,
+    };
+  },
+  [actions.switchChannel](state, { payload: { id } }) {
     return {
       ...state,
       currentChannelId: id,
@@ -69,13 +93,19 @@ const channels = handleActions({
 
 const channelsUI = handleActions({
   [actions.newChannelModalShow](state, { payload: { modalShow } }) {
-    console.log('modalShow ', modalShow)
     return {
       ...state,
       addNewChannelShow: modalShow, 
     };
   },
-}, { addNewChannelShow: false });
+  [actions.modalShowOnRemoveChannel](state, { payload: { modalShow, removableId } }) {
+    console.log('modalShow ', modalShow, 'removableId ', removableId);
+    return {
+      ...state,
+      removeChannelShow: { show: modalShow, removableId }, 
+    };
+  },
+}, { addNewChannelShow: false, removeChannelShow: { show: false, removableId: null } });
 
 export default combineReducers({
   channels,
@@ -83,4 +113,5 @@ export default combineReducers({
   channelsUI,
   messageCreateState,
   channelCreateState,
+  channelRemoveState,
 });
