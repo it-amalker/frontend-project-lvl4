@@ -2,22 +2,16 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import * as actions from '../actions/index.js';
 import { useSelector, useDispatch } from "react-redux";
+import * as actions from '../actions/index.js';
 import { useFormik } from 'formik';
 import socket from '../socket.js';
-import _ from 'lodash';
 
 const modalAddChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const channelStateUI = useSelector((state) => state.channelsUI);
   const { addNewChannelShow: show } = channelStateUI;
-
-  // @ts-ignore
-  const channelAddState = useSelector(({ channelCreateState }) => channelCreateState);
-  const disabled = channelAddState === 'requested';
-  const error = channelAddState === 'failed';
 
   const formControlEl = useRef(null);
 
@@ -43,14 +37,11 @@ const modalAddChannel = () => {
     });
   }, []);
 
-  
-
   return (
     <>
-      <Button className="ml-auto btn-sm" variant="success" onClick={handleShow} disabled={disabled}>
+      <Button className="ml-auto btn-sm" variant="success" onClick={handleShow}>
         +
       </Button>
-      <span className="small text-danger">{error ? 'Probably network problems, check network connection' : null}</span>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Add new channel</Modal.Title>
@@ -73,10 +64,8 @@ const modalAddChannel = () => {
           </Form>
         </Modal.Body>
       </Modal>
-      
     </>
   );
-
 };
 
 export default modalAddChannel;

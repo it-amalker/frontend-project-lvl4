@@ -1,68 +1,37 @@
 // @ts-check
 
-import React, { useContext, useEffect, useRef } from 'react';
-import { Badge } from 'react-bootstrap';
-import * as actions from '../actions/index.js';
-import { useFormik } from 'formik';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import usernameContext from '../usernameContext.js';
+import * as actions from '../actions/index.js';
 import socket from '../socket.js';
+import MessagesStatus from './MessagesStatus.jsx';
+import ChatField from './ChatField.jsx';
 
 const Chat = () => {
   // @ts-ignore
   const channelsState = useSelector(({ channels }) => channels);
+  const { currentChannelId } = channelsState;
+
   // @ts-ignore
   const messagesState = useSelector(({ messages }) => messages);
-  // @ts-ignore
-  const messageAddState = useSelector(({ messageCreateState }) => messageCreateState);
-  const { currentChannelId } = channelsState;
-  
   const messages = messagesState.messages.filter((m) => m.channelId === currentChannelId);
-  const username = useContext(usernameContext);
 
   const dispatch = useDispatch();
-
-  const span = useRef(null);
-  
-  const formik = useFormik({
-    initialValues: {
-      text: '',
-    },
-    onSubmit: ({ text }, { resetForm }) => {
-      dispatch(actions.createMessage({ text, author: username, currentChannelId }));
-      resetForm();
-    },
-  });
 
   useEffect(() => {
     socket.on('newMessage', ({ data }) => {
       dispatch(actions.createMessageSuccess({ message: data }));
     });
   }, []);
-
-  const errors = {
-    none: () => (
-      <Badge variant="primary">Start typing message</Badge>
-    ),
-    finished: () => (
-      <Badge variant="success">Ready</Badge>
-    ),
-    requested: () => (
-      <Badge variant="primary">Sending...</Badge>
-    ),
-    failed: () => (
-      <Badge variant="danger">Probably network problems, check network connection</Badge>
-    ),
-};
   
   const renderMessages = () => {
     return (
       <div id="messages-box" className="chat-messages overflow-auto mb-1">
-        {messages.map((message) => (
-          <div key={message.id}>
-            <b>{message.author}</b>
+        {messages.map(({ id, author, text }) => (
+          <div key={id}>
+            <b>{author}</b>
             :
-            {` ${message.text}`}
+            {` ${text}`}
           </div>
         ))}
       </div>
@@ -74,24 +43,8 @@ const Chat = () => {
       <div className="d-flex flex-column h-100">
         {renderMessages()}
         <div className="mt-auto">
-          <form onSubmit={formik.handleSubmit}>
-            <input
-              autoFocus
-              className="form-control bg-light"
-              name="text"
-              type="text"
-              value={formik.values.text}
-              onChange={formik.handleChange} />
-          </form>
-          <span
-            className="small">
-              <b>Messages: </b>
-              <Badge
-                variant="primary">{messages.length}
-              </Badge>{' '}
-              <b>Status: </b> 
-              {errors[messageAddState]()}
-          </span>
+          {<ChatField />}
+          {<MessagesStatus messagesLength={messages.length} />}
         </div>
       </div>
     </div>

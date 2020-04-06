@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions/index.js';
 import cn from 'classnames';
 import Modal from './ModalAddChannel.jsx';
+import ChannelsStatus from './ChannelsStatus.jsx';
 
 const Channels = () => {
   // @ts-ignore
@@ -19,9 +20,12 @@ const Channels = () => {
 
   return (
     <div className="col-3 border-right">
-      <div className="d-flex mb-2 align-items-center">
+      <div className="d-flex align-items-center">
         <span>Channels</span>
         {<Modal />}
+      </div>
+      <div className="d-flex mb-2 mt-2 pb-1 pt-1 border-bottom border-top">
+        {<ChannelsStatus messagesLength={channels.length} />}
       </div>
       <ul className="nav flex-column nav-pills nav-fill">
         {channels.map(({ name, id}) => {
