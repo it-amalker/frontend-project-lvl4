@@ -32,7 +32,7 @@ const modalCreateChannel = () => {
 
   return (
     <>
-      <Button className="ml-auto btn-sm" variant="success" onClick={handleShow}>
+      <Button className="ml-auto btn-sm" variant="primary" onClick={handleShow}>
         +
       </Button>
       <Modal show={show} onHide={handleClose}>
@@ -40,7 +40,7 @@ const modalCreateChannel = () => {
           <Modal.Title>Add new channel</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={formik.handleSubmit}>
+          <Form autoComplete="off" onSubmit={formik.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Channel name:</Form.Label>
               <Form.Control
@@ -51,7 +51,7 @@ const modalCreateChannel = () => {
                 onChange={formik.handleChange}
               />
             </Form.Group>
-            <Button variant="secondary" type="submit" onClick={handleClose}>
+            <Button variant="primary" type="submit" onClick={handleClose}>
               Add new channel
             </Button>
           </Form>

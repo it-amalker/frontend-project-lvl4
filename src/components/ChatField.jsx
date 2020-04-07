@@ -26,7 +26,7 @@ const ChatField = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form autoComplete="off" onSubmit={formik.handleSubmit}>
       <input
         autoFocus
         className="form-control bg-light"
