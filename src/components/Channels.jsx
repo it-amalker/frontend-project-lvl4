@@ -3,26 +3,29 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import * as actions from '../actions/index.js';
-import socket from '../socket.js';
 import cn from 'classnames';
-import Modal from './ModalCreateChannel.jsx';
-import ModalRemove from './ModalRemoveChannel.jsx';
-import ChannelsStatus from './ChannelsStatus.jsx';
+import * as actions from '../actions/index';
+import socket from '../socket';
+import ModalCreate from './ModalCreateChannel';
+import ModalRemove from './ModalRemoveChannel';
+import ModalRename from './ModalRenameChannel';
+import ChannelsStatus from './ChannelsStatus';
 
 const Channels = () => {
-  // @ts-ignore
-  const channelsState = useSelector(({ channels }) => channels);
-  const { channels, currentChannelId } = channelsState;
   const dispatch = useDispatch();
+  // @ts-ignore
+  const { channels, currentChannelId } = useSelector((state) => state.channels);
 
-  const switchChannel = (id) => (e) => {
-    e.preventDefault();
+  const switchChannel = (id) => () => {
     dispatch(actions.switchChannel({ id }));
   };
 
   const onRemove = (id) => () => {
     dispatch(actions.modalShowOnRemoveChannel({ modalShow: true, removableId: id }));
+  };
+
+  const onRename = (id, name) => () => {
+    dispatch(actions.modalShowOnRenameChannel({ modalShow: true, renameId: id, prevName: name }));
   };
 
   useEffect(() => {
@@ -33,52 +36,68 @@ const Channels = () => {
 
   useEffect(() => {
     socket.on('removeChannel', ({ data: { id } }) => {
-      console.log('id ', id);
       dispatch(actions.removeChannelSuccess({ id }));
     });
   }, []);
 
+  useEffect(() => {
+    socket.on('renameChannel', ({ data: { attributes } }) => {
+      dispatch(actions.renameChannelSuccess({ channel: attributes }));
+    });
+  }, []);
+
+  const renderChannels = () => (
+    <ul className="nav flex-column nav-pills nav-fill">
+      {channels.map(({ name, id, removable }) => {
+        const isActive = id === currentChannelId;
+        const btnClasses = cn({
+          'btn-block': true,
+          active: isActive,
+        });
+        return (
+          <li key={id} className="nav-item mb-1">
+            <ButtonGroup className="btn-block">
+              <Button
+                style={{ zIndex: 2 }}
+                className={btnClasses}
+                variant="light"
+                onClick={switchChannel(id)}
+              >
+                {isActive ? <b>{name}</b> : `${name}`}
+              </Button>
+              <Button
+                disabled={!removable}
+                variant="secondary"
+                onClick={onRename(id, name)}
+              >
+                {'\u270E'}
+              </Button>
+              <Button
+                disabled={!removable}
+                variant="secondary"
+                onClick={onRemove(id)}
+              >
+                -
+              </Button>
+            </ButtonGroup>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
   return (
-    <div className="col-3 border-right">
-      {<ModalRemove />}
+    <div className="col-3 border-right h-100 overflow-auto">
       <div className="d-flex align-items-center">
         <span>Channels</span>
-        {<Modal />}
+        <ModalCreate />
       </div>
-      <div className="d-flex mb-2 mt-2 pb-1 pt-1 border-bottom border-top">
-        {<ChannelsStatus messagesLength={channels.length} />}
+      <div className="d-flex my-2 py-1 border-bottom border-top">
+        <ChannelsStatus messagesLength={channels.length} />
       </div>
-      <ul className="nav flex-column nav-pills nav-fill">
-        {channels.map(({ name, id, removable}) => {
-          const isActive = id === currentChannelId;
-          const btnClasses = cn({
-            'btn-block': true,
-            active: isActive,
-          });
-          return (
-            <li key={id} className="nav-item mb-1">
-              <ButtonGroup className="btn-block">
-                <Button
-                  style={{zIndex: 2}}
-                  className={btnClasses}
-                  variant="light"
-                  onClick={switchChannel(id)}
-                >
-                  {name}
-                </Button>
-                <Button
-                  disabled={!removable}
-                  className="overflow-auto" 
-                  variant="secondary"
-                  onClick={onRemove(id)}
-                >
-                  -
-                </Button>
-              </ButtonGroup>
-            </li>
-          );
-        })}
-      </ul>
+      {renderChannels()}
+      {<ModalRemove />}
+      {<ModalRename />}
     </div>
   );
 };
