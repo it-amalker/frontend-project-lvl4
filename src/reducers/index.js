@@ -115,33 +115,33 @@ const channelsUI = handleActions({
   [actions.newChannelModalShow](state, { payload: { modalShow } }) {
     return {
       ...state,
-      addNewChannelShow: modalShow, 
+      addNewChannelShow: modalShow,
     };
   },
   [actions.modalShowOnRemoveChannel](state, { payload: { modalShow, removableId } }) {
     return {
       ...state,
-      removeChannelShow: { show: modalShow, removableId }, 
+      removeChannelShow: { show: modalShow, removableId },
     };
   },
   [actions.modalShowOnRenameChannel](state, { payload: { modalShow, renameId, prevName } }) {
     return {
       ...state,
-      renameChannelShow: { show: modalShow, renameId, prevName }, 
+      renameChannelShow: { show: modalShow, renameId, prevName },
     };
   },
 }, {
-    addNewChannelShow: false,
-    removeChannelShow: {
-      show: false,
-      removableId: null
-    },
-    renameChannelShow: {
-      show: false,
-      renameId: null,
-      prevName: '',
-    },
-  });
+  addNewChannelShow: false,
+  removeChannelShow: {
+    show: false,
+    removableId: null,
+  },
+  renameChannelShow: {
+    show: false,
+    renameId: null,
+    prevName: '',
+  },
+});
 
 export default combineReducers({
   channels,
