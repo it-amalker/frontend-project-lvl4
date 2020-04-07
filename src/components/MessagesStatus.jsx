@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { Badge } from 'react-bootstrap';
-import { useSelector, useDispatch } from "react-redux";
-import { resetCreateMessageStatus } from '../actions/index.js';
-import setResetDelay from '../utils.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetCreateMessageStatus } from '../actions/index';
+import setResetDelay from '../utils';
 
 const MessagesStatus = ({ messagesLength }) => {
   // @ts-ignore
-  const messageCreateState = useSelector(({ messageCreateState }) => messageCreateState);
+  const messageCreateState = useSelector((state) => state.messageCreateState);
   const dispatch = useDispatch();
 
   const statusByMessagesState = {
@@ -36,10 +36,11 @@ const MessagesStatus = ({ messagesLength }) => {
     <div>
       <span className="small">
         <b>Messages: </b>
-        <Badge variant="primary">{messagesLength}</Badge>{' '}
+        <Badge variant="primary">{messagesLength}</Badge>
+        {' '}
       </span>
       <span className="small">
-        <b>Status: </b> 
+        <b>Status: </b>
         {statusByMessagesState[messageCreateState]()}
       </span>
     </div>

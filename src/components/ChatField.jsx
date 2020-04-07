@@ -1,15 +1,15 @@
 // @ts-check
 
 import React, { useContext } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from '../actions/index.js';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import usernameContext from '../usernameContext.js';
+import * as actions from '../actions/index';
+
+import usernameContext from '../usernameContext';
 
 const ChatField = () => {
   // @ts-ignore
-  const channelsState = useSelector(({ channels }) => channels);
-  const { currentChannelId } = channelsState;
+  const { currentChannelId } = useSelector(({ channels }) => channels);
 
   const dispatch = useDispatch();
 
@@ -28,12 +28,12 @@ const ChatField = () => {
   return (
     <form autoComplete="off" onSubmit={formik.handleSubmit}>
       <input
-        autoFocus
         className="form-control bg-light"
         name="text"
         type="text"
         value={formik.values.text}
-        onChange={formik.handleChange} />
+        onChange={formik.handleChange}
+      />
     </form>
   );
 };
