@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import faker from 'faker';
 
 const getUsernameFromCookies = () => {
-  const username = faker.fake("{{internet.userName}}");
+  const username = faker.fake('{{internet.userName}}');
   if (!Cookies.get('username')) {
     Cookies.set('username', username);
   }
