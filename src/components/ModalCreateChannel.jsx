@@ -2,27 +2,27 @@
 
 import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from "react-redux";
-import * as actions from '../actions/index.js';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
+import * as actions from '../actions/index';
 
-const modalCreateChannel = () => {
+
+const ModalCreateChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const channelStateUI = useSelector((state) => state.channelsUI);
-  const { addNewChannelShow: show } = channelStateUI;
+  const { addNewChannelShow: show } = useSelector((state) => state.channelsUI);
 
   const formControlEl = useRef(null);
 
   const handleClose = () => dispatch(actions.newChannelModalShow({ modalShow: false }));
   const handleShow = () => {
     dispatch(actions.newChannelModalShow({ modalShow: true }));
-    setTimeout(()=> formControlEl.current.focus(), 200);
+    setTimeout(() => formControlEl.current.select(), 200);
   };
 
   const formik = useFormik({
     initialValues: {
-      text: '',
+      text: 'New Channel',
     },
     onSubmit: ({ text: name }, { resetForm }) => {
       dispatch(actions.createChannel({ name }));
@@ -32,14 +32,14 @@ const modalCreateChannel = () => {
 
   return (
     <>
-      <Button className="ml-auto btn-sm" variant="primary" onClick={handleShow}>
-        +
+      <Button className="ml-auto btn-sm" variant="success" onClick={handleShow}>
+        <b>+</b>
       </Button>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add new channel</Modal.Title>
+      <Modal centered show={show} onHide={handleClose} size="sm">
+        <Modal.Header closeButton className="pb-2">
+          <Modal.Title>Create new channel</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="pt-1">
           <Form autoComplete="off" onSubmit={formik.handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Channel name:</Form.Label>
@@ -51,7 +51,7 @@ const modalCreateChannel = () => {
                 onChange={formik.handleChange}
               />
             </Form.Group>
-            <Button variant="primary" type="submit" onClick={handleClose}>
+            <Button block variant="primary" type="submit" onClick={handleClose}>
               Add new channel
             </Button>
           </Form>
@@ -61,4 +61,4 @@ const modalCreateChannel = () => {
   );
 };
 
-export default modalCreateChannel;
+export default ModalCreateChannel;
