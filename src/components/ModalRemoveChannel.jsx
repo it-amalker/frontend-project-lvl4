@@ -22,14 +22,14 @@ const modalRemoveChannel = () => {
     <>
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Channel will be removed permanently.</Modal.Title>
+          <Modal.Title>Channel will be removed permanently</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Button variant="success" type="submit" onClick={handleRemoveChannel}>
-            Confirm
-          </Button>{' '}
+        <Modal.Body className="ml-auto">
           <Button variant="secondary" type="button" onClick={handleClose}>
             Cancel
+            </Button>{' '}
+          <Button variant="danger" type="submit" onClick={handleRemoveChannel}>
+            Remove
           </Button>
         </Modal.Body>
       </Modal>
