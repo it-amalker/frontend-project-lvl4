@@ -2,12 +2,13 @@
 
 import axios from 'axios';
 import { createAction } from 'redux-actions';
-import routes from '../routes.js';
+import routes from '../routes';
 
 export const initAppState = createAction('STATE_INIT');
 
 export const newChannelModalShow = createAction('CHANNEL_MODAL_SHOW');
 export const modalShowOnRemoveChannel = createAction('MODAL_REMOVE_CHANNEL');
+export const modalShowOnRenameChannel = createAction('MODAL_RENAME_CHANNEL');
 
 export const createMessageRequest = createAction('MESSAGE_CREATE_REQUEST');
 export const createMessageSuccess = createAction('MESSAGE_CREATE_SUCCESS');
@@ -23,6 +24,11 @@ export const removeChannelRequest = createAction('CHANNEL_REMOVE_REQUEST');
 export const removeChannelSuccess = createAction('CHANNEL_REMOVE_SUCCESS');
 export const removeChannelFailure = createAction('CHANNEL_REMOVE_FAILURE');
 export const resetRemoveChannelStatus = createAction('CHANNEL_REMOVE_STATUS');
+
+export const renameChannelRequest = createAction('CHANNEL_RENAME_REQUEST');
+export const renameChannelSuccess = createAction('CHANNEL_RENAME_SUCCESS');
+export const renameChannelFailure = createAction('CHANNEL_RENAME_FAILURE');
+export const resetRenameChannelStatus = createAction('CHANNEL_RENAME_STATUS');
 
 export const switchChannel = createAction('CHANNEL_SWITCH');
 
@@ -56,6 +62,17 @@ export const removeChannel = ({ id }) => async (dispatch) => {
   } catch (e) {
     dispatch(removeChannelFailure());
     throw new Error(`Cannot remove channel, probably network problems: ${e}`);
+  }
+};
+
+export const renameChannel = ({ id, name }) => async (dispatch) => {
+  dispatch(renameChannelRequest());
+  try {
+    const url = routes.channelPath(id);
+    await axios.patch(url, { data: { attributes: { name } } });
+  } catch (e) {
+    dispatch(renameChannelFailure());
+    throw new Error(`Cannot rename channel, probably network problems: ${e}`);
   }
 };
 

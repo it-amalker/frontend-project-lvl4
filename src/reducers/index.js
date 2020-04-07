@@ -48,6 +48,21 @@ const channelRemoveState = handleActions({
   },
 }, 'none');
 
+const channelRenameState = handleActions({
+  [actions.renameChannelRequest]() {
+    return 'requested';
+  },
+  [actions.renameChannelFailure]() {
+    return 'failed';
+  },
+  [actions.renameChannelSuccess]() {
+    return 'finished';
+  },
+  [actions.resetRenameChannelStatus]() {
+    return 'none';
+  },
+}, 'none');
+
 const messages = handleActions({
   [actions.initAppState](state, { payload: { gon } }) {
     return {
@@ -75,11 +90,16 @@ const channels = handleActions({
     };
   },
   [actions.removeChannelSuccess](state, { payload: { id } }) {
-    console.log('id ', id);
     const newChannels = state.channels.filter((c) => c.id !== id);
-    console.log('newChannels ', newChannels);
     return {
       channels: newChannels,
+      currentChannelId: 1,
+    };
+  },
+  [actions.renameChannelSuccess](state, { payload: { channel } }) {
+    const updatedChannels = state.channels.map((c) => (c.id === channel.id ? channel : c));
+    return {
+      channels: updatedChannels,
       currentChannelId: 1,
     };
   },
@@ -99,13 +119,29 @@ const channelsUI = handleActions({
     };
   },
   [actions.modalShowOnRemoveChannel](state, { payload: { modalShow, removableId } }) {
-    console.log('modalShow ', modalShow, 'removableId ', removableId);
     return {
       ...state,
       removeChannelShow: { show: modalShow, removableId }, 
     };
   },
-}, { addNewChannelShow: false, removeChannelShow: { show: false, removableId: null } });
+  [actions.modalShowOnRenameChannel](state, { payload: { modalShow, renameId, prevName } }) {
+    return {
+      ...state,
+      renameChannelShow: { show: modalShow, renameId, prevName }, 
+    };
+  },
+}, {
+    addNewChannelShow: false,
+    removeChannelShow: {
+      show: false,
+      removableId: null
+    },
+    renameChannelShow: {
+      show: false,
+      renameId: null,
+      prevName: '',
+    },
+  });
 
 export default combineReducers({
   channels,
@@ -114,4 +150,5 @@ export default combineReducers({
   messageCreateState,
   channelCreateState,
   channelRemoveState,
+  channelRenameState,
 });
