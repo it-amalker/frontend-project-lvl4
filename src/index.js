@@ -8,20 +8,18 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { createStore, applyMiddleware, compose } from 'redux';
-import reducers from './reducers/index.js';
-import { initState } from './actions/index.js';
-
-import App from './components/App.jsx';
-
 // @ts-ignore
-import gon from 'gon';
+import gon from 'gon'; // eslint-disable-line import/no-unresolved
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducers from './reducers/index';
+import { initState } from './actions/index';
+
+import App from './components/App';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
-console.log('it works!');
 console.log('gon', gon);
 
 const store = createStore(
