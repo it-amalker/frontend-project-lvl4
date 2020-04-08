@@ -2,6 +2,7 @@
 
 plugins:
   - react
+  - import
   - 'jsx-a11y'
 
 env:
@@ -19,9 +20,14 @@ parser: babel-eslint
 extends:
   - eslint:recommended
   - plugin:react/recommended
+  - plugin:jest/recommended
   - airbnb
+  - plugin:import/errors
+  - plugin:import/warnings
 
 rules:
   no-console: 0
   react/jsx-uses-vars: 1
+  react/prop-types: 0
+  react/jsx-filename-extension: off
 
