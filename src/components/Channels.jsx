@@ -70,7 +70,7 @@ const Channels = () => {
                 variant="secondary"
                 onClick={onRename(id, name)}
               >
-                {'\u270E'}
+                ...
               </Button>
               <Button
                 disabled={!removable}
