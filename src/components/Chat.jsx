@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../actions/index';
+import { createMessageSuccess } from '../actions/index';
 import socket from '../socket';
 import MessagesStatus from './MessagesStatus';
 import ChatField from './ChatField';
@@ -18,7 +18,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on('newMessage', ({ data }) => {
-      dispatch(actions.createMessageSuccess({ message: data }));
+      dispatch(createMessageSuccess({ message: data }));
     });
   }, []);
 

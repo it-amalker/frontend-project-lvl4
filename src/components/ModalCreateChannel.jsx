@@ -14,9 +14,9 @@ const ModalCreateChannel = () => {
 
   const formControlEl = useRef(null);
 
-  const handleClose = () => dispatch(actions.newChannelModalShow({ modalShow: false }));
+  const handleClose = () => dispatch(actions.modalShowOnCreateChannel({ modalShow: false }));
   const handleShow = () => {
-    dispatch(actions.newChannelModalShow({ modalShow: true }));
+    dispatch(actions.modalShowOnCreateChannel({ modalShow: true }));
     setTimeout(() => formControlEl.current.select(), 200);
   };
 

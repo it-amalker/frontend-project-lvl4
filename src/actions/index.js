@@ -6,7 +6,7 @@ import routes from '../routes';
 
 export const initAppState = createAction('STATE_INIT');
 
-export const newChannelModalShow = createAction('CHANNEL_MODAL_SHOW');
+export const modalShowOnCreateChannel = createAction('MODAL_CREATE_CHANNEL');
 export const modalShowOnRemoveChannel = createAction('MODAL_REMOVE_CHANNEL');
 export const modalShowOnRenameChannel = createAction('MODAL_RENAME_CHANNEL');
 

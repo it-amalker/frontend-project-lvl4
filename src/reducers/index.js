@@ -112,7 +112,7 @@ const channels = handleActions({
 }, { channels: [], currentChannelId: 1 });
 
 const channelsUI = handleActions({
-  [actions.newChannelModalShow](state, { payload: { modalShow } }) {
+  [actions.modalShowOnCreateChannel](state, { payload: { modalShow } }) {
     return {
       ...state,
       addNewChannelShow: modalShow,

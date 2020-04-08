@@ -3,7 +3,7 @@
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import * as actions from '../actions/index';
+import { createMessage } from '../actions/index';
 
 import usernameContext from '../usernameContext';
 
@@ -20,7 +20,7 @@ const ChatField = () => {
       text: '',
     },
     onSubmit: ({ text }, { resetForm }) => {
-      dispatch(actions.createMessage({ text, author, currentChannelId }));
+      dispatch(createMessage({ text, author, currentChannelId }));
       resetForm();
     },
   });
