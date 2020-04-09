@@ -1,10 +1,11 @@
 // @ts-check
 
 import React, { useRef } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { Button, Modal, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { actions, asyncActions } from '../slices';
+import { setSelect } from '../utils';
 
 const ModalRenameChannel = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const ModalRenameChannel = () => {
   const { shown, renameId, prevName } = useSelector((state) => state.channelsUI.renameChannel);
   const { rename: renameChannel } = asyncActions.renameChannel();
 
-  const formControlEl = useRef(null);
+  const modalInput = useRef(null);
 
   const handleClose = () => (
     dispatch(actions.modalShowOnRenameChannel({ show: false, renameId: null, prevName: '' }))
@@ -31,11 +32,9 @@ const ModalRenameChannel = () => {
     },
   });
 
-  const setSelected = () => setTimeout(() => formControlEl.current.select(), 200);
-
   return (
     <>
-      <Modal centered show={shown} onHide={handleClose} onEnter={setSelected} size="sm">
+      <Modal centered show={shown} onHide={handleClose} onEnter={setSelect(modalInput)} size="sm">
         <Modal.Header closeButton className="pb-2">
           <Modal.Title>Rename channel</Modal.Title>
         </Modal.Header>
@@ -44,7 +43,7 @@ const ModalRenameChannel = () => {
             <Form.Group controlId="formBasicEmail">
               <Form.Label>New channel name:</Form.Label>
               <Form.Control
-                ref={formControlEl}
+                ref={modalInput}
                 type="text"
                 name="text"
                 value={formik.values.text}
