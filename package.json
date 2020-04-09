@@ -1,6 +1,6 @@
 {
   "name": "slack-chat-by-amalker",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "main": "dist/index.js",
   "bin": {
@@ -86,6 +86,7 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "jest": "^25.2.7",
     "jest-cli": "^25.2.7",
     "nodemon": "^2.0.2"
