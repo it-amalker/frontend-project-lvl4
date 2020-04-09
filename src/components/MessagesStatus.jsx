@@ -3,32 +3,31 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-// import { resetCreateMessageStatus } from '../actions/index';
-import setResetDelay from '../utils';
-import { actions as actionsNew } from '../slices';
+import { actions } from '../slices';
+import { setResetDelay } from '../utils';
 
 const MessagesStatus = ({ messagesLength }) => {
   // @ts-ignore
   const { status, text } = useSelector((state) => state.createMessageStatus);
   const dispatch = useDispatch();
 
-  const statusByMessagesState = {
-    none: (message) => (
-      <Badge variant="primary">{message}</Badge>
+  const statuses = {
+    none: (info) => (
+      <Badge variant="primary">{info}</Badge>
     ),
-    requested: (message) => (
-      <Badge variant="info">{message}</Badge>
+    requested: (info) => (
+      <Badge variant="info">{info}</Badge>
     ),
-    finished: (message) => {
-      setResetDelay(() => dispatch(actionsNew.resetCreateMessageStatus()), 500);
+    finished: (info) => {
+      setResetDelay(() => dispatch(actions.resetCreateMessageStatus()), 500);
       return (
-        <Badge variant="success">{message}</Badge>
+        <Badge variant="success">{info}</Badge>
       );
     },
-    failed: (message) => {
-      setResetDelay(() => dispatch(actionsNew.resetCreateMessageStatus()), 3500);
+    failed: (info) => {
+      setResetDelay(() => dispatch(actions.resetCreateMessageStatus()), 3500);
       return (
-        <Badge variant="danger">{message}</Badge>
+        <Badge variant="danger">{info}</Badge>
       );
     },
   };
@@ -42,7 +41,7 @@ const MessagesStatus = ({ messagesLength }) => {
       </span>
       <span className="small">
         <b>Status: </b>
-        {statusByMessagesState[status](text)}
+        {statuses[status](text)}
       </span>
     </div>
   );

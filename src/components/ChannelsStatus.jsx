@@ -4,10 +4,9 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Badge } from 'react-bootstrap';
 import { actions } from '../slices';
-import setResetDelay from '../utils';
+import { setResetDelay } from '../utils';
 
 const ChannelsStatus = ({ messagesLength }) => {
-  const { resetCreateChannelStatus, resetRemoveChannelStatus, resetRenameChannelStatus } = actions;
   const {
     // @ts-ignore
     createChannelStatus,
@@ -17,33 +16,41 @@ const ChannelsStatus = ({ messagesLength }) => {
     renameChannelStatus,
   } = useSelector((state) => state);
 
-  const { status: createStatus, text: createText } = createChannelStatus;
-  const { status: removeStatus, text: removeText } = removeChannelStatus;
-  const { status: renameStatus, text: renameText } = renameChannelStatus;
-
   const dispatch = useDispatch();
 
-  const sharedStatuses = {
-    finished: ({ reset, status }) => {
+  const statuses = {
+    none: () => null,
+    requested: ({ info }) => (
+      <Badge variant="primary">{info}</Badge>
+    ),
+    finished: ({ reset, info }) => {
       setResetDelay(() => dispatch(reset()), 2500);
       return (
-        <Badge variant="success">{status}</Badge>
+        <Badge variant="success">{info}</Badge>
       );
     },
-    failed: ({ reset }) => {
+    failed: ({ reset, info }) => {
       setResetDelay(() => dispatch(reset()), 3500);
       return (
-        <Badge variant="danger">Probably network problems, check network connection</Badge>
+        <Badge variant="danger">{info}</Badge>
       );
     },
   };
 
-  const statuses = {
-    none: () => null,
-    requested: () => (
-      <Badge variant="primary">Processing...</Badge>
-    ),
-    ...sharedStatuses,
+  const resetTypes = {
+    create: actions.resetCreateChannelStatus,
+    remove: actions.resetRemoveChannelStatus,
+    rename: actions.resetRenameChannelStatus,
+  };
+
+  const getStatusInfo = ({
+    type,
+    status,
+    info,
+    isProcessing,
+  }) => {
+    const reset = resetTypes[type];
+    return isProcessing ? statuses[status]({ reset, info }) : null;
   };
 
   return (
@@ -55,9 +62,9 @@ const ChannelsStatus = ({ messagesLength }) => {
       </span>
       <span className="small">
         <b>Status: </b>
-        {statuses[createStatus]({ reset: resetCreateChannelStatus, status: createText })
-        || statuses[removeStatus]({ reset: resetRemoveChannelStatus, status: removeText })
-        || statuses[renameStatus]({ reset: resetRenameChannelStatus, status: renameText })
+        {getStatusInfo(createChannelStatus)
+        || getStatusInfo(removeChannelStatus)
+        || getStatusInfo(renameChannelStatus)
         || <Badge variant="secondary">Manage channels</Badge>}
       </span>
     </div>
