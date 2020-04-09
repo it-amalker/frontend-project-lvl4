@@ -22,6 +22,10 @@ const Channels = () => {
     dispatch(actions.switchChannel({ id }));
   };
 
+  const onCreate = () => {
+    dispatch(actions.modalShowOnCreateChannel({ show: true }));
+  };
+
   const onRemove = (id) => () => {
     dispatch(actions.modalShowOnRemoveChannel({ show: true, removableId: id }));
   };
@@ -92,14 +96,17 @@ const Channels = () => {
     <div className="col-3 border-right h-100 overflow-auto">
       <div className="d-flex align-items-center">
         <span>Channels</span>
-        <ModalCreate />
+        <Button className="ml-auto btn-sm" variant="success" onClick={onCreate}>
+          <b>+</b>
+        </Button>
       </div>
       <div className="d-flex my-2 py-1 border-bottom border-top">
         <ChannelsStatus messagesLength={channels.length} />
       </div>
       {renderChannels()}
-      {<ModalRemove />}
-      {<ModalRename />}
+      <ModalCreate />
+      <ModalRemove />
+      <ModalRename />
     </div>
   );
 };
