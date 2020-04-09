@@ -1,17 +1,20 @@
 // @ts-check
 
-// @ts-ignore
-import gon from 'gon'; // eslint-disable-line import/no-unresolved
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+// @ts-ignore
+import gon from 'gon';
 import Cookies from 'js-cookie';
 import faker from 'faker';
 import reducer, { actions } from './slices';
 
 import App from './components/App';
 import UsernameContext from './UsernameContext';
+
+const { messages } = gon;
+const { channels, currentChannelId } = gon;
 
 const getUsernameFromCookies = () => {
   const username = faker.fake('{{internet.userName}}');
@@ -21,11 +24,8 @@ const getUsernameFromCookies = () => {
   return Cookies.get('username');
 };
 
-const { messages } = gon;
-const { channels, currentChannelId } = gon;
-
 export default () => {
-  console.log('gon', gon);
+  // console.log('gon', gon);
 
   const store = configureStore({ reducer });
 
