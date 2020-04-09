@@ -1,4 +1,5 @@
 // @ts-check
+/* eslint-disable react/display-name */
 
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
