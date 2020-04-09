@@ -9,14 +9,14 @@ const ModalRemoveChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { shown, removableId: id } = useSelector((state) => state.channelsUI.removeChannel);
-  const { remove: removeChannel } = asyncActions.removeChannel();
+  const { removeChannel } = asyncActions;
 
   const handleClose = () => (
     dispatch(actions.modalShowOnRemoveChannel({ show: false, removableId: null }))
   );
 
   const handleRemoveChannel = () => {
-    removeChannel({ id });
+    dispatch(removeChannel({ id }));
     handleClose();
   };
 

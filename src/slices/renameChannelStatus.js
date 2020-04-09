@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import routes from '../routes';
 
@@ -40,23 +39,16 @@ const slice = createSlice({
 
 const { renameChannelRequest, renameChannelSuccess, renameChannelFailure } = slice.actions;
 
-const renameChannel = () => {
-  const dispatch = useDispatch();
-  const rename = async ({ id, name }) => {
-    dispatch(renameChannelRequest());
-    try {
-      const url = routes.channelPath(id);
-      await axios.patch(url, { data: { attributes: { name } } });
-      dispatch(renameChannelSuccess());
-    } catch (e) {
-      dispatch(renameChannelFailure());
-      throw new Error(`Cannot rename channel, probably network problems: ${e}`);
-    }
-  };
-
-  return {
-    rename,
-  };
+const renameChannel = ({ id, name }) => async (dispatch) => {
+  dispatch(renameChannelRequest());
+  try {
+    const url = routes.channelPath(id);
+    await axios.patch(url, { data: { attributes: { name } } });
+    dispatch(renameChannelSuccess());
+  } catch (e) {
+    dispatch(renameChannelFailure());
+    throw new Error(`Cannot rename channel, probably network problems: ${e}`);
+  }
 };
 
 const actions = { ...slice.actions };

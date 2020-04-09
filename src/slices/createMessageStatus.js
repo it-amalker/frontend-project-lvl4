@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import routes from '../routes';
 
@@ -34,23 +33,16 @@ const slice = createSlice({
 
 const { createMessageRequest, createMessageSuccess, createMessageFailure } = slice.actions;
 
-const createMessage = () => {
-  const dispatch = useDispatch();
-  const create = async ({ text, author, currentChannelId }) => {
-    dispatch(createMessageRequest());
-    try {
-      const url = routes.channelMessagesPath(currentChannelId);
-      await axios.post(url, { data: { attributes: { text, author } } });
-      dispatch(createMessageSuccess());
-    } catch (e) {
-      dispatch(createMessageFailure());
-      throw new Error(`Cannot create new message, probably network problems: ${e}`);
-    }
-  };
-
-  return {
-    create,
-  };
+const createMessage = ({ text, author, currentChannelId }) => async (dispatch) => {
+  dispatch(createMessageRequest());
+  try {
+    const url = routes.channelMessagesPath(currentChannelId);
+    await axios.post(url, { data: { attributes: { text, author } } });
+    dispatch(createMessageSuccess());
+  } catch (e) {
+    dispatch(createMessageFailure());
+    throw new Error(`Cannot create new message, probably network problems: ${e}`);
+  }
 };
 
 const actions = { ...slice.actions };

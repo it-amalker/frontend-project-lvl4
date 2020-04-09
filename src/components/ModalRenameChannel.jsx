@@ -11,7 +11,7 @@ const ModalRenameChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { shown, renameId, prevName } = useSelector((state) => state.channelsUI.renameChannel);
-  const { rename: renameChannel } = asyncActions.renameChannel();
+  const { renameChannel } = asyncActions;
 
   const modalInput = useRef(null);
 
@@ -26,7 +26,7 @@ const ModalRenameChannel = () => {
       id: renameId,
     },
     onSubmit: ({ text: name, id }, { resetForm }) => {
-      renameChannel({ id, name });
+      dispatch(renameChannel({ id, name }));
       handleClose();
       resetForm();
     },

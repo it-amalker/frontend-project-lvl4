@@ -12,7 +12,7 @@ const ModalCreateChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { shown } = useSelector((state) => state.channelsUI.createChannel);
-  const { create: createChannel } = asyncActions.createChannel();
+  const { createChannel } = asyncActions;
 
   const modalInput = useRef(null);
 
@@ -23,7 +23,7 @@ const ModalCreateChannel = () => {
       text: 'New Channel',
     },
     onSubmit: ({ text: name }, { resetForm }) => {
-      createChannel({ name });
+      dispatch(createChannel({ name }));
       resetForm();
     },
   });
