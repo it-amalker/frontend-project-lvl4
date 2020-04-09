@@ -4,8 +4,8 @@ import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-// import * as actions from '../actions/index';
 import { actions, asyncActions } from '../slices';
+import { setSelect } from '../utils';
 
 
 const ModalCreateChannel = () => {
@@ -14,13 +14,9 @@ const ModalCreateChannel = () => {
   const { shown } = useSelector((state) => state.channelsUI.createChannel);
   const { create: createChannel } = asyncActions.createChannel();
 
-  const formControlEl = useRef(null);
+  const modalInput = useRef(null);
 
   const handleClose = () => dispatch(actions.modalShowOnCreateChannel({ show: false }));
-  const handleShow = () => {
-    dispatch(actions.modalShowOnCreateChannel({ show: true }));
-    setTimeout(() => formControlEl.current.select(), 200);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -34,10 +30,7 @@ const ModalCreateChannel = () => {
 
   return (
     <>
-      <Button className="ml-auto btn-sm" variant="success" onClick={handleShow}>
-        <b>+</b>
-      </Button>
-      <Modal centered show={shown} onHide={handleClose} size="sm">
+      <Modal centered show={shown} onHide={handleClose} onEnter={setSelect(modalInput)} size="sm">
         <Modal.Header closeButton className="pb-2">
           <Modal.Title>Create new channel</Modal.Title>
         </Modal.Header>
@@ -46,7 +39,7 @@ const ModalCreateChannel = () => {
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Channel name:</Form.Label>
               <Form.Control
-                ref={formControlEl}
+                ref={modalInput}
                 type="text"
                 name="text"
                 value={formik.values.text}
