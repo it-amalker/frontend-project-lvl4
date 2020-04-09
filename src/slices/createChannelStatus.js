@@ -9,25 +9,31 @@ import routes from '../routes';
 const slice = createSlice({
   name: 'createChannelStatus',
   initialState: {
+    type: 'create',
     status: 'none',
-    text: 'Manage channels',
+    info: 'Manage channels',
+    isProcessing: false,
   },
   reducers: {
     createChannelRequest(state) {
       state.status = 'requested';
-      state.text = 'Processing...';
+      state.info = 'Processing...';
+      state.isProcessing = true;
     },
     createChannelSuccess(state) {
       state.status = 'finished';
-      state.text = 'Channel added';
+      state.info = 'Channel added';
+      state.isProcessing = true;
     },
     createChannelFailure(state) {
       state.status = 'failed';
-      state.text = 'Probably network problems, check network connection';
+      state.info = 'Probably network problems, check network connection';
+      state.isProcessing = true;
     },
     resetCreateChannelStatus(state) {
       state.status = 'none';
-      state.text = 'Manage channels';
+      state.info = 'Manage channels';
+      state.isProcessing = false;
     },
   },
 });

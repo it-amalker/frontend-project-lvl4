@@ -9,25 +9,31 @@ import routes from '../routes';
 const slice = createSlice({
   name: 'renameChannelStatus',
   initialState: {
+    type: 'rename',
     status: 'none',
-    text: 'Manage channels',
+    info: 'Manage channels',
+    isProcessing: false,
   },
   reducers: {
     renameChannelRequest(state) {
       state.status = 'requested';
-      state.text = 'Processing...';
+      state.info = 'Processing...';
+      state.isProcessing = true;
     },
     renameChannelSuccess(state) {
       state.status = 'finished';
-      state.text = 'Channel renamed';
+      state.info = 'Channel renamed';
+      state.isProcessing = true;
     },
     renameChannelFailure(state) {
       state.status = 'failed';
-      state.text = 'Probably network problems, check network connection';
+      state.info = 'Probably network problems, check network connection';
+      state.isProcessing = true;
     },
     resetRenameChannelStatus(state) {
       state.status = 'none';
-      state.text = 'Manage channels';
+      state.info = 'Manage channels';
+      state.isProcessing = false;
     },
   },
 });

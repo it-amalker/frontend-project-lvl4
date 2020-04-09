@@ -9,25 +9,31 @@ import routes from '../routes';
 const slice = createSlice({
   name: 'removeChannelStatus',
   initialState: {
+    type: 'remove',
     status: 'none',
-    text: 'Manage channels',
+    info: 'Manage channels',
+    isProcessing: false,
   },
   reducers: {
     removeChannelRequest(state) {
       state.status = 'requested';
-      state.text = 'Processing...';
+      state.info = 'Processing...';
+      state.isProcessing = true;
     },
     removeChannelSuccess(state) {
       state.status = 'finished';
-      state.text = 'Channel removed';
+      state.info = 'Channel removed';
+      state.isProcessing = true;
     },
     removeChannelFailure(state) {
       state.status = 'failed';
-      state.text = 'Probably network problems, check network connection';
+      state.info = 'Probably network problems, check network connection';
+      state.isProcessing = true;
     },
     resetRemoveChannelStatus(state) {
       state.status = 'none';
-      state.text = 'Manage channels';
+      state.info = 'Manage channels';
+      state.isProcessing = false;
     },
   },
 });
