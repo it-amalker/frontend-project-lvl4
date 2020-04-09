@@ -38,19 +38,19 @@ const Channels = () => {
     socket.on('newChannel', ({ data }) => {
       dispatch(actions.createChannel({ channel: data }));
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     socket.on('removeChannel', ({ data: { id } }) => {
       dispatch(actions.removeChannel({ id }));
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     socket.on('renameChannel', ({ data: { attributes } }) => {
       dispatch(actions.renameChannel({ channel: attributes }));
     });
-  }, []);
+  }, [dispatch]);
 
   const renderChannels = () => (
     <ul className="nav flex-column nav-pills nav-fill">
