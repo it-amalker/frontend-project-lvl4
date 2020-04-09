@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { createMessageSuccess } from '../actions/index';
 import socket from '../socket';
 import MessagesStatus from './MessagesStatus';
 import ChatField from './ChatField';
@@ -40,8 +39,8 @@ const Chat = () => {
       <div className="d-flex flex-column h-100">
         {renderMessages()}
         <div className="mt-auto">
-          {<ChatField />}
-          {<MessagesStatus messagesLength={messages.length} />}
+          <ChatField />
+          <MessagesStatus messagesLength={messages.length} />
         </div>
       </div>
     </div>
