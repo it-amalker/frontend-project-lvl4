@@ -4,17 +4,18 @@ import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { modalShowOnRenameChannel, renameChannel } from '../actions/index';
+import { actions, asyncActions } from '../slices';
 
 const ModalRenameChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const { show, renameId, prevName } = useSelector((state) => state.channelsUI.renameChannelShow);
+  const { shown, renameId, prevName } = useSelector((state) => state.channelsUI.renameChannel);
+  const { rename: renameChannel } = asyncActions.renameChannel();
 
   const formControlEl = useRef(null);
 
   const handleClose = () => (
-    dispatch(modalShowOnRenameChannel({ modalShow: false, renameId: null, prevName: '' }))
+    dispatch(actions.modalShowOnRenameChannel({ show: false, renameId: null, prevName: '' }))
   );
 
   const formik = useFormik({
@@ -24,7 +25,7 @@ const ModalRenameChannel = () => {
       id: renameId,
     },
     onSubmit: ({ text: name, id }, { resetForm }) => {
-      dispatch(renameChannel({ id, name }));
+      renameChannel({ id, name });
       handleClose();
       resetForm();
     },
@@ -34,7 +35,7 @@ const ModalRenameChannel = () => {
 
   return (
     <>
-      <Modal centered show={show} onHide={handleClose} onEnter={setSelected} size="sm">
+      <Modal centered show={shown} onHide={handleClose} onEnter={setSelected} size="sm">
         <Modal.Header closeButton className="pb-2">
           <Modal.Title>Rename channel</Modal.Title>
         </Modal.Header>

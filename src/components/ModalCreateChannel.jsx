@@ -4,19 +4,21 @@ import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import * as actions from '../actions/index';
+// import * as actions from '../actions/index';
+import { actions, asyncActions } from '../slices';
 
 
 const ModalCreateChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const { addNewChannelShow: show } = useSelector((state) => state.channelsUI);
+  const { shown } = useSelector((state) => state.channelsUI.createChannel);
+  const { create: createChannel } = asyncActions.createChannel();
 
   const formControlEl = useRef(null);
 
-  const handleClose = () => dispatch(actions.modalShowOnCreateChannel({ modalShow: false }));
+  const handleClose = () => dispatch(actions.modalShowOnCreateChannel({ show: false }));
   const handleShow = () => {
-    dispatch(actions.modalShowOnCreateChannel({ modalShow: true }));
+    dispatch(actions.modalShowOnCreateChannel({ show: true }));
     setTimeout(() => formControlEl.current.select(), 200);
   };
 
@@ -25,7 +27,7 @@ const ModalCreateChannel = () => {
       text: 'New Channel',
     },
     onSubmit: ({ text: name }, { resetForm }) => {
-      dispatch(actions.createChannel({ name }));
+      createChannel({ name });
       resetForm();
     },
   });
@@ -35,7 +37,7 @@ const ModalCreateChannel = () => {
       <Button className="ml-auto btn-sm" variant="success" onClick={handleShow}>
         <b>+</b>
       </Button>
-      <Modal centered show={show} onHide={handleClose} size="sm">
+      <Modal centered show={shown} onHide={handleClose} size="sm">
         <Modal.Header closeButton className="pb-2">
           <Modal.Title>Create new channel</Modal.Title>
         </Modal.Header>

@@ -1,24 +1,29 @@
 // @ts-check
 
 import React from 'react';
-import { Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetCreateChannelStatus, resetRemoveChannelStatus, resetRenameChannelStatus } from '../actions/index';
+import { Badge } from 'react-bootstrap';
+import { actions } from '../slices';
 import setResetDelay from '../utils';
 
 const ChannelsStatus = ({ messagesLength }) => {
+  const { resetCreateChannelStatus, resetRemoveChannelStatus, resetRenameChannelStatus } = actions;
   const {
     // @ts-ignore
-    channelCreateState,
+    createChannelStatus,
     // @ts-ignore
-    channelRemoveState,
+    removeChannelStatus,
     // @ts-ignore
-    channelRenameState,
+    renameChannelStatus,
   } = useSelector((state) => state);
+
+  const { status: createStatus, text: createText } = createChannelStatus;
+  const { status: removeStatus, text: removeText } = removeChannelStatus;
+  const { status: renameStatus, text: renameText } = renameChannelStatus;
 
   const dispatch = useDispatch();
 
-  const sharedStatusesByChannelsState = {
+  const sharedStatuses = {
     finished: ({ reset, status }) => {
       setResetDelay(() => dispatch(reset()), 2500);
       return (
@@ -33,12 +38,12 @@ const ChannelsStatus = ({ messagesLength }) => {
     },
   };
 
-  const statusByChannelsState = {
+  const statuses = {
     none: () => null,
     requested: () => (
       <Badge variant="primary">Processing...</Badge>
     ),
-    ...sharedStatusesByChannelsState,
+    ...sharedStatuses,
   };
 
   return (
@@ -50,9 +55,9 @@ const ChannelsStatus = ({ messagesLength }) => {
       </span>
       <span className="small">
         <b>Status: </b>
-        {statusByChannelsState[channelCreateState]({ reset: resetCreateChannelStatus, status: 'Channel added' })
-        || statusByChannelsState[channelRemoveState]({ reset: resetRemoveChannelStatus, status: 'Channel removed' })
-        || statusByChannelsState[channelRenameState]({ reset: resetRenameChannelStatus, status: 'Channel renamed' })
+        {statuses[createStatus]({ reset: resetCreateChannelStatus, status: createText })
+        || statuses[removeStatus]({ reset: resetRemoveChannelStatus, status: removeText })
+        || statuses[renameStatus]({ reset: resetRenameChannelStatus, status: renameText })
         || <Badge variant="secondary">Manage channels</Badge>}
       </span>
     </div>

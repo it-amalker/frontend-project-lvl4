@@ -1,17 +1,15 @@
 // @ts-check
 
 import React, { useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import { createMessage } from '../actions/index';
-
-import usernameContext from '../usernameContext';
+import usernameContext from '../UsernameContext';
+import { asyncActions } from '../slices';
 
 const ChatField = () => {
   // @ts-ignore
-  const { currentChannelId } = useSelector(({ channels }) => channels);
-
-  const dispatch = useDispatch();
+  const { currentChannelId } = useSelector((state) => state.channels);
+  const { create: createMessage } = asyncActions.createMessage();
 
   const author = useContext(usernameContext);
 
@@ -20,7 +18,7 @@ const ChatField = () => {
       text: '',
     },
     onSubmit: ({ text }, { resetForm }) => {
-      dispatch(createMessage({ text, author, currentChannelId }));
+      createMessage({ text, author, currentChannelId });
       resetForm();
     },
   });

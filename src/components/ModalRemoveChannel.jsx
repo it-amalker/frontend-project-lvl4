@@ -1,27 +1,28 @@
 // @ts-check
 
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { modalShowOnRemoveChannel, removeChannel } from '../actions/index';
+import { Button, Modal } from 'react-bootstrap';
+import { actions, asyncActions } from '../slices';
 
 const ModalRemoveChannel = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const { show, removableId: id } = useSelector((state) => state.channelsUI.removeChannelShow);
+  const { shown, removableId: id } = useSelector((state) => state.channelsUI.removeChannel);
+  const { remove: removeChannel } = asyncActions.removeChannel();
 
   const handleClose = () => (
-    dispatch(modalShowOnRemoveChannel({ modalShow: false, removableId: null }))
+    dispatch(actions.modalShowOnRemoveChannel({ show: false, removableId: null }))
   );
 
   const handleRemoveChannel = () => {
-    dispatch(removeChannel({ id }));
+    removeChannel({ id });
     handleClose();
   };
 
   return (
     <>
-      <Modal centered show={show} onHide={handleClose}>
+      <Modal centered show={shown} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className="h5">Channel will be removed permanently</Modal.Title>
         </Modal.Header>

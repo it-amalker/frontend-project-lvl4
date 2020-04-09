@@ -2,23 +2,24 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createMessageSuccess } from '../actions/index';
+// import { createMessageSuccess } from '../actions/index';
 import socket from '../socket';
 import MessagesStatus from './MessagesStatus';
 import ChatField from './ChatField';
+import { actions } from '../slices';
 
 const Chat = () => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const { currentChannelId } = useSelector(({ channels }) => channels);
+  const { currentChannelId } = useSelector((state) => state.channels);
 
   // @ts-ignore
-  const messagesState = useSelector(({ messages }) => messages);
+  const messagesState = useSelector((state) => state.messages);
   const messages = messagesState.messages.filter((m) => m.channelId === currentChannelId);
 
   useEffect(() => {
     socket.on('newMessage', ({ data }) => {
-      dispatch(createMessageSuccess({ message: data }));
+      dispatch(actions.updateMessages({ message: data }));
     });
   }, []);
 

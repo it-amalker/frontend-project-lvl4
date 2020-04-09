@@ -4,8 +4,10 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import cn from 'classnames';
-import * as actions from '../actions/index';
 import socket from '../socket';
+
+import { actions } from '../slices';
+
 import ModalCreate from './ModalCreateChannel';
 import ModalRemove from './ModalRemoveChannel';
 import ModalRename from './ModalRenameChannel';
@@ -21,28 +23,28 @@ const Channels = () => {
   };
 
   const onRemove = (id) => () => {
-    dispatch(actions.modalShowOnRemoveChannel({ modalShow: true, removableId: id }));
+    dispatch(actions.modalShowOnRemoveChannel({ show: true, removableId: id }));
   };
 
   const onRename = (id, name) => () => {
-    dispatch(actions.modalShowOnRenameChannel({ modalShow: true, renameId: id, prevName: name }));
+    dispatch(actions.modalShowOnRenameChannel({ show: true, renameId: id, prevName: name }));
   };
 
   useEffect(() => {
     socket.on('newChannel', ({ data }) => {
-      dispatch(actions.createChannelSuccess({ channel: data }));
+      dispatch(actions.createChannel({ channel: data }));
     });
   }, []);
 
   useEffect(() => {
     socket.on('removeChannel', ({ data: { id } }) => {
-      dispatch(actions.removeChannelSuccess({ id }));
+      dispatch(actions.removeChannel({ id }));
     });
   }, []);
 
   useEffect(() => {
     socket.on('renameChannel', ({ data: { attributes } }) => {
-      dispatch(actions.renameChannelSuccess({ channel: attributes }));
+      dispatch(actions.renameChannel({ channel: attributes }));
     });
   }, []);
 

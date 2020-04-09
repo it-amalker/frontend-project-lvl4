@@ -3,31 +3,32 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetCreateMessageStatus } from '../actions/index';
+// import { resetCreateMessageStatus } from '../actions/index';
 import setResetDelay from '../utils';
+import { actions as actionsNew } from '../slices';
 
 const MessagesStatus = ({ messagesLength }) => {
   // @ts-ignore
-  const messageCreateState = useSelector((state) => state.messageCreateState);
+  const { status, text } = useSelector((state) => state.createMessageStatus);
   const dispatch = useDispatch();
 
   const statusByMessagesState = {
-    none: () => (
-      <Badge variant="primary">Start chatting</Badge>
+    none: (message) => (
+      <Badge variant="primary">{message}</Badge>
     ),
-    requested: () => (
-      <Badge variant="info">Sending...</Badge>
+    requested: (message) => (
+      <Badge variant="info">{message}</Badge>
     ),
-    finished: () => {
-      setResetDelay(() => dispatch(resetCreateMessageStatus()), 500);
+    finished: (message) => {
+      setResetDelay(() => dispatch(actionsNew.resetCreateMessageStatus()), 500);
       return (
-        <Badge variant="success">Message sent</Badge>
+        <Badge variant="success">{message}</Badge>
       );
     },
-    failed: () => {
-      setResetDelay(() => dispatch(resetCreateMessageStatus()), 3500);
+    failed: (message) => {
+      setResetDelay(() => dispatch(actionsNew.resetCreateMessageStatus()), 3500);
       return (
-        <Badge variant="danger">Probably network problems, check network connection</Badge>
+        <Badge variant="danger">{message}</Badge>
       );
     },
   };
@@ -41,7 +42,7 @@ const MessagesStatus = ({ messagesLength }) => {
       </span>
       <span className="small">
         <b>Status: </b>
-        {statusByMessagesState[messageCreateState]()}
+        {statusByMessagesState[status](text)}
       </span>
     </div>
   );
