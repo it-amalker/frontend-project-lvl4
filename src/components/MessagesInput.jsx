@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import usernameContext from '../UsernameContext';
 import { asyncActions } from '../slices';
 
-const ChatField = () => {
+const MessageInput = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { currentChannelId } = useSelector((state) => state.channels);
@@ -37,4 +37,4 @@ const ChatField = () => {
   );
 };
 
-export default ChatField;
+export default MessageInput;

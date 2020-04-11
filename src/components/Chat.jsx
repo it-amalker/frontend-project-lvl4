@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import MessagesStatus from './MessagesStatus';
-import ChatField from './ChatField';
+import MessagesInput from './MessagesInput';
 
 const Chat = () => {
   // @ts-ignore
@@ -41,7 +41,7 @@ const Chat = () => {
           <div ref={messagesEnd} />
         </div>
         <div className="mt-auto">
-          <ChatField />
+          <MessagesInput />
           <MessagesStatus messagesLength={messages.length} />
         </div>
       </div>
