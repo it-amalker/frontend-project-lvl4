@@ -1,16 +1,16 @@
 // @ts-check
 
 import React, { useContext } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import axios from 'axios';
 import usernameContext from '../UsernameContext';
-import { asyncActions } from '../slices';
+import MessagesStatus from './MessagesStatus';
+import routes from '../routes';
 
-const MessageInput = () => {
-  const dispatch = useDispatch();
+const MessageInput = ({ messagesLength }) => {
   // @ts-ignore
   const { currentChannelId } = useSelector((state) => state.channels);
-  const { createMessage } = asyncActions;
 
   const author = useContext(usernameContext);
 
@@ -18,8 +18,14 @@ const MessageInput = () => {
     initialValues: {
       text: '',
     },
-    onSubmit: ({ text }, { resetForm }) => {
-      dispatch(createMessage({ text, author, currentChannelId }));
+    onSubmit: async ({ text }, { resetForm, setErrors }) => {
+      try {
+        const url = routes.channelMessagesPath(currentChannelId);
+        await axios.post(url, { data: { attributes: { text, author } } });
+      } catch (e) {
+        setErrors({ text: `Network problems: ${e}` });
+        throw new Error(`Cannot create new message, probably network problems: ${e}`);
+      }
       resetForm();
     },
   });
@@ -32,6 +38,11 @@ const MessageInput = () => {
         type="text"
         value={formik.values.text}
         onChange={formik.handleChange}
+      />
+      <MessagesStatus
+        messagesLength={messagesLength}
+        errors={formik.errors}
+        isSubmitting={formik.isSubmitting}
       />
     </form>
   );
