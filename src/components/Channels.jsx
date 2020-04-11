@@ -1,15 +1,12 @@
 // @ts-check
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import cn from 'classnames';
-import io from 'socket.io-client';
 import { actions } from '../slices';
 import ChannelsStatus from './ChannelsStatus';
 import getModal from './modals';
-
-const socket = io();
 
 const Channels = () => {
   const dispatch = useDispatch();
@@ -29,24 +26,6 @@ const Channels = () => {
   const hideModal = () => (
     dispatch(actions.setModalInfo({ type: null, channelInfo: null }))
   );
-
-  useEffect(() => {
-    socket.on('newChannel', ({ data }) => {
-      dispatch(actions.createChannel({ channel: data }));
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on('removeChannel', ({ data: { id } }) => {
-      dispatch(actions.removeChannel({ id }));
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
-    socket.on('renameChannel', ({ data: { attributes } }) => {
-      dispatch(actions.renameChannel({ channel: attributes }));
-    });
-  }, [dispatch]);
 
   const renderModal = ({ type, channelInfo }) => {
     if (!type) {

@@ -1,16 +1,11 @@
 // @ts-check
 
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import io from 'socket.io-client';
+import { useSelector } from 'react-redux';
 import MessagesStatus from './MessagesStatus';
 import ChatField from './ChatField';
-import { actions } from '../slices';
-
-const socket = io();
 
 const Chat = () => {
-  const dispatch = useDispatch();
   // @ts-ignore
   const { currentChannelId } = useSelector((state) => state.channels);
 
@@ -19,12 +14,6 @@ const Chat = () => {
   const messages = messagesState.messages.filter((m) => m.channelId === currentChannelId);
 
   const messagesEnd = useRef(null);
-
-  useEffect(() => {
-    socket.on('newMessage', ({ data }) => {
-      dispatch(actions.createMessage({ message: data }));
-    });
-  }, [dispatch]);
 
   const scrollToBottom = () => {
     messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
