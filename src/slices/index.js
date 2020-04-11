@@ -4,7 +4,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import channels, { actions as channelActions } from './channels';
 import messages, { actions as messagesActions } from './messages';
-import channelsUI, { actions as channelsUIActions } from './channelsUIState';
+import modalInfo, { actions as modalInfoActions } from './modalInfo';
 
 import createMessageStatus, { actions as createMessageActions, createMessage } from './createMessageStatus';
 import createChannelStatus, { actions as createChannelActions, createChannel } from './createChannelStatus';
@@ -14,7 +14,7 @@ import renameChannelStatus, { actions as renameChannelActions, renameChannel } f
 export default combineReducers({
   channels,
   messages,
-  channelsUI,
+  modalInfo,
   createMessageStatus,
   createChannelStatus,
   removeChannelStatus,
@@ -24,7 +24,7 @@ export default combineReducers({
 const actions = {
   ...channelActions,
   ...messagesActions,
-  ...channelsUIActions,
+  ...modalInfoActions,
   ...createMessageActions,
   ...createChannelActions,
   ...removeChannelActions,

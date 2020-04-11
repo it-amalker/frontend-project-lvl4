@@ -25,12 +25,11 @@ const getUsernameFromCookies = () => {
 };
 
 export default () => {
-  // console.log('gon', gon);
+  console.log(gon);
 
   const store = configureStore({ reducer });
 
-  store.dispatch(actions.initMessagesState({ messages }));
-  store.dispatch(actions.initChannelsState({ channels, currentChannelId }));
+  store.dispatch(actions.initState({ channels, messages, currentChannelId }));
 
   ReactDOM.render(
     <Provider store={store}>
