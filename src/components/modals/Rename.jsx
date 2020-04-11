@@ -37,6 +37,7 @@ const ModalRenameChannel = ({ channelInfo, onHide }) => {
             <Form.Group controlId="formBasicEmail">
               <Form.Label>New channel name:</Form.Label>
               <Form.Control
+                required
                 ref={modalInput}
                 type="text"
                 name="name"
