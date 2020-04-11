@@ -2,51 +2,49 @@
 
 import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { actions, asyncActions } from '../slices';
-import { setSelect } from '../utils';
+import { asyncActions } from '../../slices';
+import { setSelected } from '../../utils';
 
 
-const ModalCreateChannel = () => {
+const ModalCreateChannel = ({ onHide }) => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const { shown } = useSelector((state) => state.channelsUI.createChannel);
   const { createChannel } = asyncActions;
 
   const modalInput = useRef(null);
 
-  const handleClose = () => dispatch(actions.modalShowOnCreateChannel({ show: false }));
-
   const formik = useFormik({
     initialValues: {
-      text: 'New Channel',
+      name: 'New Channel',
     },
-    onSubmit: ({ text: name }, { resetForm }) => {
+    onSubmit: ({ name }) => {
       dispatch(createChannel({ name }));
-      resetForm();
+      onHide();
     },
   });
 
   return (
     <>
-      <Modal centered show={shown} onHide={handleClose} onEnter={setSelect(modalInput)} size="sm">
+      <Modal centered show onHide={onHide} onEnter={setSelected(modalInput)} size="sm">
         <Modal.Header closeButton className="pb-2">
           <Modal.Title>Create new channel</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pt-1">
           <Form autoComplete="off" onSubmit={formik.handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
+            <Form.Group>
               <Form.Label>Channel name:</Form.Label>
               <Form.Control
+                required
                 ref={modalInput}
                 type="text"
-                name="text"
-                value={formik.values.text}
+                name="name"
+                value={formik.values.name}
                 onChange={formik.handleChange}
               />
             </Form.Group>
-            <Button block variant="primary" type="submit" onClick={handleClose}>
+            <Button block variant="primary" type="submit">
               Add new channel
             </Button>
           </Form>
