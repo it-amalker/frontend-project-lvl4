@@ -4,35 +4,31 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import cn from 'classnames';
-import socket from '../socket';
-
+import io from 'socket.io-client';
 import { actions } from '../slices';
-
-import ModalCreate from './ModalCreateChannel';
-import ModalRemove from './ModalRemoveChannel';
-import ModalRename from './ModalRenameChannel';
 import ChannelsStatus from './ChannelsStatus';
+import getModal from './modals';
+
+const socket = io();
 
 const Channels = () => {
   const dispatch = useDispatch();
   // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channels);
+  // @ts-ignore
+  const modalInfo = useSelector((state) => state.modalInfo);
 
   const switchChannel = (id) => () => {
     dispatch(actions.switchChannel({ id }));
   };
 
-  const onCreate = () => {
-    dispatch(actions.modalShowOnCreateChannel({ show: true }));
-  };
+  const showModal = (type, channelInfo = null) => (
+    dispatch(actions.setModalInfo({ type, channelInfo }))
+  );
 
-  const onRemove = (id) => () => {
-    dispatch(actions.modalShowOnRemoveChannel({ show: true, removableId: id }));
-  };
-
-  const onRename = (id, name) => () => {
-    dispatch(actions.modalShowOnRenameChannel({ show: true, renameId: id, prevName: name }));
-  };
+  const hideModal = () => (
+    dispatch(actions.setModalInfo({ type: null, channelInfo: null }))
+  );
 
   useEffect(() => {
     socket.on('newChannel', ({ data }) => {
@@ -51,6 +47,15 @@ const Channels = () => {
       dispatch(actions.renameChannel({ channel: attributes }));
     });
   }, [dispatch]);
+
+  const renderModal = ({ type, channelInfo }) => {
+    if (!type) {
+      return null;
+    }
+
+    const Modal = getModal(type);
+    return <Modal channelInfo={channelInfo} onHide={hideModal} />;
+  };
 
   const renderChannels = () => (
     <ul className="nav flex-column nav-pills nav-fill">
@@ -74,14 +79,14 @@ const Channels = () => {
               <Button
                 disabled={!removable}
                 variant="secondary"
-                onClick={onRename(id, name)}
+                onClick={() => showModal('renaming', { id, prevName: name })}
               >
                 ...
               </Button>
               <Button
                 disabled={!removable}
                 variant="secondary"
-                onClick={onRemove(id)}
+                onClick={() => showModal('removing', { id })}
               >
                 -
               </Button>
@@ -96,7 +101,7 @@ const Channels = () => {
     <div className="col-3 border-right h-100 overflow-auto">
       <div className="d-flex align-items-center">
         <span>Channels</span>
-        <Button className="ml-auto btn-sm" variant="success" onClick={onCreate}>
+        <Button className="ml-auto btn-sm" variant="success" onClick={() => showModal('creating')}>
           <b>+</b>
         </Button>
       </div>
@@ -104,9 +109,7 @@ const Channels = () => {
         <ChannelsStatus messagesLength={channels.length} />
       </div>
       {renderChannels()}
-      <ModalCreate />
-      <ModalRemove />
-      <ModalRename />
+      {renderModal(modalInfo)}
     </div>
   );
 };
