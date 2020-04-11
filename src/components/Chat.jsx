@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import socket from '../socket';
+import io from 'socket.io-client';
 import MessagesStatus from './MessagesStatus';
 import ChatField from './ChatField';
 import { actions } from '../slices';
+
+const socket = io();
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on('newMessage', ({ data }) => {
-      dispatch(actions.updateMessages({ message: data }));
+      dispatch(actions.createMessage({ message: data }));
     });
   }, [dispatch]);
 
