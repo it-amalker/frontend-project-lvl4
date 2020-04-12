@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Badge } from 'react-bootstrap';
 import cn from 'classnames';
 import { actions } from '../slices';
-import ChannelsStatus from './ChannelsStatus';
 import getModal from './modals';
 
 const Channels = () => {
@@ -78,14 +77,14 @@ const Channels = () => {
 
   return (
     <div className="col-3 border-right h-100 overflow-auto">
-      <div className="d-flex align-items-center">
-        <span>Channels</span>
+      <div className="d-flex align-items-center mb-3 pb-2 border-bottom">
+        <span>
+          <b>Channels: </b>
+          <Badge variant="secondary">{channels.length}</Badge>
+        </span>
         <Button className="ml-auto btn-sm" variant="success" onClick={() => showModal('creating')}>
           <b>+</b>
         </Button>
-      </div>
-      <div className="d-flex my-2 py-1 border-bottom border-top">
-        <ChannelsStatus messagesLength={channels.length} />
       </div>
       {renderChannels()}
       {renderModal(modalInfo)}

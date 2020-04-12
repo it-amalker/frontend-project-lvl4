@@ -2,26 +2,28 @@
 
 import React, { useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { asyncActions } from '../../slices';
+import axios from 'axios';
+import routes from '../../routes';
 import { setSelected } from '../../utils';
 
 
 const ModalCreateChannel = ({ onHide }) => {
-  const dispatch = useDispatch();
-  // @ts-ignore
-  const { createChannel } = asyncActions;
-
   const modalInput = useRef(null);
 
   const formik = useFormik({
     initialValues: {
       name: 'New Channel',
     },
-    onSubmit: ({ name }) => {
-      dispatch(createChannel({ name }));
-      onHide();
+    onSubmit: async ({ name }, { setErrors }) => {
+      try {
+        const url = routes.channelsPath();
+        await axios.post(url, { data: { attributes: { name } } });
+        onHide();
+      } catch (e) {
+        setErrors({ name: 'Network problems' });
+        throw new Error(`Failed to create new channel, probably network problems: ${e}`);
+      }
     },
   });
 
@@ -43,6 +45,9 @@ const ModalCreateChannel = ({ onHide }) => {
                 value={formik.values.name}
                 onChange={formik.handleChange}
               />
+              <Form.Text className="text-muted">
+                {formik.errors.name ? <span className="text-danger">{formik.errors.name}</span> : null}
+              </Form.Text>
             </Form.Group>
             <Button block variant="primary" type="submit">
               Add new channel

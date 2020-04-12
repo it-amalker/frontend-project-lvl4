@@ -1,19 +1,30 @@
 // @ts-check
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
-import { asyncActions } from '../../slices';
+import axios from 'axios';
+import routes from '../../routes';
+import { actions } from '../../slices';
 
 const ModalRemoveChannel = ({ channelInfo, onHide }) => {
   const dispatch = useDispatch();
 
-  const { removeChannel } = asyncActions;
   const { id } = channelInfo;
 
-  const onRemove = () => {
-    dispatch(removeChannel({ id }));
-    onHide();
+  // @ts-ignore
+  const { errors } = useSelector((state) => state.removeStatus);
+
+  const onRemove = async () => {
+    try {
+      const url = routes.channelPath(id);
+      await axios.delete(url);
+      dispatch(actions.resetErrors());
+      onHide();
+    } catch (e) {
+      dispatch(actions.setError({ networkError: e }));
+      throw new Error(`Failed to remove channel, probably network problems: ${e}`);
+    }
   };
 
   return (
@@ -23,6 +34,7 @@ const ModalRemoveChannel = ({ channelInfo, onHide }) => {
           <Modal.Title className="h5">Channel will be removed permanently</Modal.Title>
         </Modal.Header>
         <Modal.Body className="ml-auto">
+          {errors.length > 0 ? <span className="text-danger mr-2">Network problems</span> : null}
           <Button variant="secondary" type="button" onClick={onHide}>
             Cancel
           </Button>

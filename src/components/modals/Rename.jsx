@@ -1,16 +1,13 @@
 // @ts-check
 
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { asyncActions } from '../../slices';
+import axios from 'axios';
+import routes from '../../routes';
 import { setSelected } from '../../utils';
 
 const ModalRenameChannel = ({ channelInfo, onHide }) => {
-  const dispatch = useDispatch();
-
-  const { renameChannel } = asyncActions;
   const { id, prevName } = channelInfo;
 
   const modalInput = useRef(null);
@@ -20,9 +17,15 @@ const ModalRenameChannel = ({ channelInfo, onHide }) => {
     initialValues: {
       name: prevName,
     },
-    onSubmit: ({ name }) => {
-      dispatch(renameChannel({ id, name }));
-      onHide();
+    onSubmit: async ({ name }, { setErrors }) => {
+      try {
+        const url = routes.channelPath(id);
+        await axios.patch(url, { data: { attributes: { name } } });
+        onHide();
+      } catch (e) {
+        setErrors({ name: 'Network problems' });
+        throw new Error(`Failed to rename channel, probably network problems: ${e}`);
+      }
     },
   });
 
@@ -44,6 +47,9 @@ const ModalRenameChannel = ({ channelInfo, onHide }) => {
                 value={formik.values.name}
                 onChange={formik.handleChange}
               />
+              <Form.Text className="text-muted">
+                {formik.errors.name ? <span className="text-danger">{formik.errors.name}</span> : null}
+              </Form.Text>
             </Form.Group>
             <Button block variant="primary" type="submit">
               Rename
