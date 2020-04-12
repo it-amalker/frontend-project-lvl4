@@ -27,6 +27,7 @@ const MessageInput = ({ messagesLength }) => {
         resetForm();
       } catch (e) {
         setErrors({ text: `Network problems: ${e}` });
+        throw new Error(`Failed to create new message, probably network problems: ${e}`);
       }
     },
   });
