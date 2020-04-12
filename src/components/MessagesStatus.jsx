@@ -3,15 +3,15 @@
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 
-const renderStatus = (errors, isSubmitting) => {
-  if (errors) {
-    return <Badge variant="danger">Probably network problems, check network connection</Badge>;
-  }
-  if (isSubmitting) {
-    return <Badge variant="primary">Sending...</Badge>;
-  }
-  return <Badge variant="success">Start chatting</Badge>;
-};
+const renderErrors = (errors) => (errors
+  ? <Badge variant="danger">Probably network problems, check network connection</Badge>
+  : null
+);
+
+const renderProcess = (isSubmitting) => (isSubmitting
+  ? <Badge variant="primary">Sending...</Badge>
+  : <Badge variant="success">Start chatting</Badge>
+);
 
 const MessagesStatus = ({ messagesLength, isSubmitting, errors }) => (
   <div>
@@ -22,7 +22,7 @@ const MessagesStatus = ({ messagesLength, isSubmitting, errors }) => (
     </span>
     <span className="small">
       <b>Status: </b>
-      {renderStatus(errors.text, isSubmitting)}
+      {renderErrors(errors.text) || renderProcess(isSubmitting)}
     </span>
   </div>
 );
