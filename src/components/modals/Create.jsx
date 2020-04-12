@@ -5,10 +5,9 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../../routes';
-import { setSelected } from '../../utils';
 
 
-const ModalCreateChannel = ({ onHide }) => {
+const ModalCreateChannel = ({ onHide, setSelected }) => {
   const modalInput = useRef(null);
 
   const formik = useFormik({

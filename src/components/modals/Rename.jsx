@@ -5,9 +5,8 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../../routes';
-import { setSelected } from '../../utils';
 
-const ModalRenameChannel = ({ channelInfo, onHide }) => {
+const ModalRenameChannel = ({ channelInfo, onHide, setSelected }) => {
   const { id, prevName } = channelInfo;
 
   const modalInput = useRef(null);
