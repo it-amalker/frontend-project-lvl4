@@ -1,7 +1,12 @@
 // @ts-check
 
 import React, { useRef } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import {
+  Button,
+  Modal,
+  Form,
+  Spinner,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../../routes';
@@ -36,7 +41,7 @@ const ModalRenameChannel = ({ channelInfo, onHide, setSelected }) => {
         </Modal.Header>
         <Modal.Body className="pt-1">
           <Form autoComplete="off" onSubmit={formik.handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
+            <Form.Group>
               <Form.Label>New channel name:</Form.Label>
               <Form.Control
                 required
@@ -45,13 +50,28 @@ const ModalRenameChannel = ({ channelInfo, onHide, setSelected }) => {
                 name="name"
                 value={formik.values.name}
                 onChange={formik.handleChange}
+                maxLength={15}
               />
               <Form.Text className="text-muted">
-                {formik.errors.name ? <span className="text-danger">{formik.errors.name}</span> : null}
+                {formik.errors.name
+                  ? <span className="text-danger">{formik.errors.name}</span>
+                  : null}
               </Form.Text>
             </Form.Group>
-            <Button block variant="primary" type="submit">
+            <Button block variant="primary" type="submit" disabled={formik.isSubmitting}>
               Rename
+              {' '}
+              {formik.isSubmitting
+                ? (
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                )
+                : null}
             </Button>
           </Form>
         </Modal.Body>
