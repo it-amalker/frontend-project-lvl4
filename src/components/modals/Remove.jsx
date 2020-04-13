@@ -1,31 +1,34 @@
 // @ts-check
 
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import {
+  Button,
+  Modal,
+  Form,
+  Spinner,
+} from 'react-bootstrap';
+import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../../routes';
-import { actions } from '../../slices';
 
 const ModalRemoveChannel = ({ channelInfo, onHide }) => {
-  const dispatch = useDispatch();
-
   const { id } = channelInfo;
 
-  // @ts-ignore
-  const { errors } = useSelector((state) => state.removeStatus);
-
-  const onRemove = async () => {
-    try {
-      const url = routes.channelPath(id);
-      await axios.delete(url);
-      dispatch(actions.resetErrors());
-      onHide();
-    } catch (e) {
-      dispatch(actions.setError({ networkError: e }));
-      throw new Error(`Failed to remove channel, probably network problems: ${e}`);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      submit: null,
+    },
+    onSubmit: async (values, { setErrors }) => {
+      try {
+        const url = routes.channelPath(id);
+        await axios.delete(url);
+        onHide();
+      } catch (e) {
+        setErrors({ submit: 'Network problems' });
+        throw new Error(`Failed to remove channel, probably network problems: ${e}`);
+      }
+    },
+  });
 
   return (
     <>
@@ -34,14 +37,30 @@ const ModalRemoveChannel = ({ channelInfo, onHide }) => {
           <Modal.Title className="h5">Channel will be removed permanently</Modal.Title>
         </Modal.Header>
         <Modal.Body className="ml-auto">
-          {errors.length > 0 ? <span className="text-danger mr-2">Network problems</span> : null}
-          <Button variant="secondary" type="button" onClick={onHide}>
-            Cancel
-          </Button>
-          {' '}
-          <Button variant="danger" type="submit" onClick={onRemove}>
-            Remove
-          </Button>
+          <Form onSubmit={formik.handleSubmit}>
+            {formik.errors.submit
+              ? <span className="text-danger mr-2">{formik.errors.submit}</span>
+              : null}
+            <Button variant="secondary" type="button" onClick={onHide}>
+              Cancel
+            </Button>
+            {' '}
+            <Button variant="danger" type="submit" disabled={formik.isSubmitting}>
+              Remove
+              {' '}
+              {formik.isSubmitting
+                ? (
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                )
+                : null}
+            </Button>
+          </Form>
         </Modal.Body>
       </Modal>
     </>
