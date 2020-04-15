@@ -12,17 +12,17 @@ const slice = createSlice({
       state.currentChannelId = currentChannelId;
     },
     createChannel: (state, { payload: { channel } }) => {
-      state.channels = [...state.channels, channel.attributes];
+      state.channels.push(channel.attributes);
     },
     removeChannel: (state, { payload: { id } }) => {
+      const defaultCurrentChannelId = 1;
       const newChannels = state.channels.filter((c) => c.id !== id);
       state.channels = newChannels;
-      state.currentChannelId = 1;
+      state.currentChannelId = defaultCurrentChannelId;
     },
     renameChannel: (state, { payload: { channel } }) => {
       const updatedChannels = state.channels.map((c) => (c.id === channel.id ? channel : c));
       state.channels = updatedChannels;
-      state.currentChannelId = 1;
     },
     switchChannel: (state, { payload: { id } }) => {
       state.currentChannelId = id;
