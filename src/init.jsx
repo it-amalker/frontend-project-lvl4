@@ -31,20 +31,22 @@ export default () => {
 
   store.dispatch(actions.initState({ channels, messages, currentChannelId }));
 
-  socket.on('newMessage', ({ data }) => {
-    store.dispatch(actions.createMessage({ message: data }));
-  });
+  socket.on('connect', () => {
+    socket.on('newMessage', ({ data }) => {
+      store.dispatch(actions.createMessage({ message: data }));
+    });
 
-  socket.on('newChannel', ({ data }) => {
-    store.dispatch(actions.createChannel({ channel: data }));
-  });
+    socket.on('newChannel', ({ data }) => {
+      store.dispatch(actions.createChannel({ channel: data }));
+    });
 
-  socket.on('removeChannel', ({ data: { id } }) => {
-    store.dispatch(actions.removeChannel({ id }));
-  });
+    socket.on('removeChannel', ({ data: { id } }) => {
+      store.dispatch(actions.removeChannel({ id }));
+    });
 
-  socket.on('renameChannel', ({ data: { attributes } }) => {
-    store.dispatch(actions.renameChannel({ channel: attributes }));
+    socket.on('renameChannel', ({ data: { attributes } }) => {
+      store.dispatch(actions.renameChannel({ channel: attributes }));
+    });
   });
 
   ReactDOM.render(
