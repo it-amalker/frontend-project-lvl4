@@ -17,6 +17,13 @@ import UsernameContext from './UsernameContext';
 const socket = io();
 
 const { channels, messages, currentChannelId } = gon;
+const {
+  initState,
+  createMessage,
+  createChannel,
+  removeChannel,
+  renameChannel,
+} = actions;
 
 const getUsernameFromCookies = () => {
   const username = faker.fake('{{internet.userName}}');
@@ -29,24 +36,22 @@ const getUsernameFromCookies = () => {
 export default () => {
   const store = configureStore({ reducer });
 
-  store.dispatch(actions.initState({ channels, messages, currentChannelId }));
+  store.dispatch(initState({ channels, messages, currentChannelId }));
 
-  socket.on('connect', () => {
-    socket.on('newMessage', ({ data }) => {
-      store.dispatch(actions.createMessage({ message: data }));
-    });
+  socket.on('newMessage', ({ data }) => {
+    store.dispatch(createMessage({ message: data }));
+  });
 
-    socket.on('newChannel', ({ data }) => {
-      store.dispatch(actions.createChannel({ channel: data }));
-    });
+  socket.on('newChannel', ({ data }) => {
+    store.dispatch(createChannel({ channel: data }));
+  });
 
-    socket.on('removeChannel', ({ data: { id } }) => {
-      store.dispatch(actions.removeChannel({ id }));
-    });
+  socket.on('removeChannel', ({ data: { id } }) => {
+    store.dispatch(removeChannel({ id }));
+  });
 
-    socket.on('renameChannel', ({ data: { attributes } }) => {
-      store.dispatch(actions.renameChannel({ channel: attributes }));
-    });
+  socket.on('renameChannel', ({ data: { attributes } }) => {
+    store.dispatch(renameChannel({ channel: attributes }));
   });
 
   ReactDOM.render(
