@@ -26,15 +26,13 @@ const Channels = () => {
     dispatch(actions.setModalInfo({ type: null, channelInfo: null }))
   );
 
-  const setSelected = (el) => () => setTimeout(() => el.current.select(), 200);
-
   const renderModal = ({ type, channelInfo }) => {
     if (!type) {
       return null;
     }
 
     const Modal = getModal(type);
-    return <Modal channelInfo={channelInfo} onHide={hideModal} setSelected={setSelected} />;
+    return <Modal channelInfo={channelInfo} onHide={hideModal} />;
   };
 
   const renderChannels = () => (
