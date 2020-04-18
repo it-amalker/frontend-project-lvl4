@@ -84,7 +84,7 @@ const Channels = () => {
           <b>Channels: </b>
           <Badge variant="secondary">{channels.length}</Badge>
         </span>
-        <Button className="ml-auto btn-sm" variant="success" onClick={() => showModal('creating')}>
+        <Button className="ml-auto btn-sm border-secondary" variant="success" onClick={() => showModal('creating')}>
           <b>+</b>
         </Button>
       </div>
